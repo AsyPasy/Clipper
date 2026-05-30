@@ -1,0 +1,31 @@
+appId: com.clipcut.app
+productName: ClipCut
+copyright: Copyright 2026
+
+directories:
+  output: release
+
+files:
+  - dist/**/*
+  - package.json
+
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: assets/icon.ico
+  requestedExecutionLevel: asInvoker
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  installerIcon: assets/icon.ico
+  installerHeaderIcon: assets/icon.ico
+  createDesktopShortcut: false
+  createStartMenuShortcut: true
+
+extraResources:
+  - from: resources/ffmpeg/ffmpeg.exe
+    to: ffmpeg/ffmpeg.exe
+  - from: resources/hotkey_hook.node
+    to: hotkey_hook.node
