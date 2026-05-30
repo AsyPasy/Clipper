@@ -1,0 +1,43 @@
+name: Build Native Addon
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-native:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Setup Node.js 20 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build native addon
+        run: |
+          cd src/native
+          node-gyp configure --arch=x64
+          node-gyp build
+
+      - name: Copy built addon to resources
+        run: cp build/Release/hotkey_hook.node resources/hotkey_hook.node
+
+      - name: Commit and push built addon
+        run: |
+          git add resources/hotkey_hook.node
+          git commit -m "ci: rebuild native addon [skip ci]"
+          git push
