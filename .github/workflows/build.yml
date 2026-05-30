@@ -28,13 +28,10 @@ jobs:
         run: npm install
 
       - name: Build native addon
-        run: |
-          cd src/native
-          node-gyp configure --arch=x64
-          node-gyp build
+        run: npx node-gyp rebuild --directory src/native
 
       - name: Copy built addon to resources
-        run: cp build/Release/hotkey_hook.node resources/hotkey_hook.node
+        run: cp src/native/build/Release/hotkey_hook.node resources/hotkey_hook.node
 
       - name: Commit and push built addon
         run: |
